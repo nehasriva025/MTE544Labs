@@ -10,11 +10,10 @@ from rclpy.qos import QoSProfile
     # For sending velocity commands to the robot: Twist
     # For the sensors: Imu, LaserScan, and Odometry
 # Check the online documentation to fill in the lines below
-from ... import Twist
+from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Imu
-from ... import LaserScan
-from ... import Odometry
-
+from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
 from rclpy.time import Time
 
 # You may add any other imports you may need/want to use below
@@ -34,13 +33,15 @@ class motion_executioner(Node):
         
         self.radius_=0.0
         
+        self.spiral_lin_vel=0.7 # initial linear velocity for spiral motion
+        
         self.successful_init=False
         self.imu_initialized=False
         self.odom_initialized=False
         self.laser_initialized=False
         
         # TODO Part 3: Create a publisher to send velocity commands by setting the proper parameters in (...)
-        self.vel_publisher=self.create_publisher(...)
+        self.vel_publisher=self.create_publisher(Twist,'/cmd_vel',10)
                 
         # loggers
         self.imu_logger=Logger('imu_content_'+str(motion_types[motion_type])+'.csv', headers=["acc_x", "acc_y", "angular_z", "stamp"])
@@ -48,20 +49,19 @@ class motion_executioner(Node):
         self.laser_logger=Logger('laser_content_'+str(motion_types[motion_type])+'.csv', headers=["ranges", "angle_increment", "stamp"])
         
         # TODO Part 3: Create the QoS profile by setting the proper parameters in (...)
-        qos=QoSProfile(...)
+        qos=QoSProfile(reliability=2, durability=2, history=1, depth=10)
 
         # TODO Part 5: Create below the subscription to the topics corresponding to the respective sensors
         # IMU subscription
-        
-        ...
+        self.subscription=self.create_subscription(Imu, "/imu", self.imu_callback,10)
+     
         
         # ENCODER subscription
+        self.subscription=self.create_subscription(Odometry, "/odom", self.odom_callback,10)
 
-        ...
         
         # LaserScan subscription 
-        
-        ...
+        self.subscription=self.create_subscription(LaserScan, "/scan", self.laser_callback,10)
         
         self.create_timer(0.1, self.timer_callback)
 
@@ -73,15 +73,30 @@ class motion_executioner(Node):
     # You can save the needed fields into a list, and pass the list to the log_values function in utilities.py
 
     def imu_callback(self, imu_msg: Imu):
-        ...    # log imu msgs
-        
+        imu_timestamp = str(Time.from_msg(imu_msg.header.stamp).nanoseconds) # gets timestamp
+        imu_accX = str(imu_msg.linear_acceleration.x) # gets linear accel in x
+        imu_accY = str(imu_msg.linear_acceleration.y) # gets linear accel in y
+        imu_angZ = str(imu_msg.angular_velocity.z) # gets angular vel about z
+        imuList = [imu_accX,imu_accY,imu_angZ,imu_timestamp] # puts everything in list
+        self.imu_logger.log_values(imuList) # logs to csv
+
     def odom_callback(self, odom_msg: Odometry):
+        odom_timestamp = str(Time.from_msg(odom_msg.header.stamp).nanoseconds) # gets timestamp
+        odom_quat = odom_msg.pose.pose.orientation # sets quat as orientation
+        odom_th = str(euler_from_quaternion(odom_quat)) # gets theta position
+        odom_x = str(odom_msg.pose.pose.position.x) # gets x position
+        odom_y = str(odom_msg.pose.pose.position.y) # gets y position
+        odomList = [odom_x,odom_y,odom_th,odom_timestamp] # puts everything in list
+        self.odom_logger.log_values(odomList) # logs to csv
         
-        ... # log odom msgs
-                
     def laser_callback(self, laser_msg: LaserScan):
-        
-        ... # log laser msgs with position msg at that time
+        laser_Ranges = laser_msg.ranges # assigns before loop
+        for x in laser_Ranges: # for each entry in ranges list
+            laser_Range=str(x) # iterate
+            laser_timestamp = str(Time.from_msg(laser_msg.header._stamp).nanoseconds) # gets timestamp
+            laser_Inc = str(laser_msg.angle_increment) # gets angle increment in radians
+            laserList = [laser_Range,laser_Inc,laser_timestamp] # puts everything in list
+            self.laser_logger.log_values(laserList) # logs to csv
                 
     def timer_callback(self):
         
@@ -114,17 +129,24 @@ class motion_executioner(Node):
     def make_circular_twist(self):
         
         msg=Twist()
-        ... # fill up the twist msg for circular motion
+        
+        msg.linear.x=0.5
+        msg.angular.z=0.5 # circular motion is defined by non-zero linear vel in one direction and non-zero angular vel
         return msg
 
     def make_spiral_twist(self):
         msg=Twist()
-        ... # fill up the twist msg for spiral motion
+        
+        msg.angular.z=0.3 # inward spiral motion defined by constant angular vel, decreasing linear vel
+        self.spiral_lin_vel = self.spiral_lin_vel - 0.05 # decrease linear velocity
+        msg.linear.x=self.spiral_lin_vel # decrease lin vel
         return msg
     
     def make_acc_line_twist(self):
         msg=Twist()
-        ... # fill up the twist msg for line motion
+	    # non-zero linear velocity in any one direction
+        msg.linear.y=0.5
+        self.vel_publisher.publish(msg) # Publish this message
         return msg
 
 import argparse

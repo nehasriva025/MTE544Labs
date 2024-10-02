@@ -1,5 +1,5 @@
 from math import atan2, asin, sqrt
-
+import math
 M_PI=3.1415926535
 
 class Logger:
@@ -22,10 +22,11 @@ class Logger:
 
         with open(self.filename, 'a') as file:
             vals_str=""
-
-            # TODO Part 5: Write the values from the list to the file
-            ...
             
+            for values in values_list:
+                vals_str+=values
+                vals_str+=", "
+
             vals_str+="\n"
             
             file.write(vals_str)
@@ -81,11 +82,21 @@ class FileReader:
 
 # TODO Part 5: Implement the conversion from Quaternion to Euler Angles
 def euler_from_quaternion(quat):
+    x = quat.x
+    y = quat.y
+    z = quat.z
+    w = quat.w
+    # x, y, z, w = quat
     """
     Convert quaternion (w in last place) to euler roll, pitch, yaw.
     quat = [x, y, z, w]
     """
-    ... # just unpack yaw
+    # Formulas: (https://stackoverflow.com/questions/5782658/extracting-yaw-from-a-quaternion)
+    # var yaw = atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z);
+    # var pitch = asin(-2.0*(q.x*q.z - q.w*q.y));
+    # var roll = atan2(2.0*(q.x*q.y + q.w*q.z), q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z);
+    q1 = 2*(w*z + x*y)
+    q2 = 1 - 2*(y*y + z*z)
+    yaw = math.atan2(q1, q2)
+    
     return yaw
-
-

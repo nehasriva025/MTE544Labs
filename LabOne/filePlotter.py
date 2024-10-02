@@ -1,4 +1,4 @@
-# You can use this file to plot the loged sensor data
+# You can use this file to plot the logged sensor data
 # Note that you need to modify/adapt it to your own files
 # Feel free to make any modifications/additions here
 
