@@ -54,14 +54,17 @@ class motion_executioner(Node):
         # TODO Part 5: Create below the subscription to the topics corresponding to the respective sensors
         # IMU subscription
         self.subscription=self.create_subscription(Imu, "/imu", self.imu_callback,10)
+        self.imu_initialized=True
      
         
         # ENCODER subscription
         self.subscription=self.create_subscription(Odometry, "/odom", self.odom_callback,10)
+        self.odom_initialized=True
 
         
         # LaserScan subscription 
         self.subscription=self.create_subscription(LaserScan, "/scan", self.laser_callback,10)
+        self.laser_initialized=True
         
         self.create_timer(0.1, self.timer_callback)
 
