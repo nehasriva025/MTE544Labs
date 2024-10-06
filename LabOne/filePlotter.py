@@ -1,21 +1,60 @@
-# You can use this file to plot the logged sensor data
+# You can use this file to plot the loged sensor data
 # Note that you need to modify/adapt it to your own files
 # Feel free to make any modifications/additions here
 
 import matplotlib.pyplot as plt
 from utilities import FileReader
+import math
+
+def convertCartesian(values):#function to change to cartesian coordinates
+    #intialization
+    angle = 0.0
+    lines = 0
+    polar = 0.0
+    newValues = []
+    #gets the angle increment
+    angle = values[0][1]
+    #finds the number of rows in 1 scan
+    lines = math.ceil((2*math.pi)/angle)
+    #cycles through the data only up to 1 LIDAR scan
+    for i in range(0,lines-1):
+        #gets the range
+        polar = values[i][0]
+        #gets rid of inf
+        if polar == 'inf':
+            polar = 0
+        #converts to cartesian coordinates that increment with the for loop
+        xPos = polar*math.cos(angle*i)
+        yPos = polar*math.sin(angle*i)
+        #adds to a list of lists
+        newValues.append([xPos, yPos])
+
+    return newValues
+
 
 def plot_errors(filename):
     
     headers, values=FileReader(filename).read_file() 
     time_list=[]
     first_stamp=values[0][-1]
-    
-    for val in values:
-        time_list.append(val[-1] - first_stamp)
+   
+    #if it is a Lidar scan
+    if headers[0] == 'ranges':
+        # call function
+        values = convertCartesian(values)
+        #rename headers
+        headers = ['xPos','yPos']
+        #plot x vs y
+        xPos = [val[0] for val in values]  
+        yPos = [val[1] for val in values] 
+        plt.scatter(xPos, yPos, label="x vs y", color='green', marker='o')
+    #if it is not a lidar scan
+    else:
+        for val in values:
+            time_list.append(val[-1] - first_stamp)
 
-    for i in range(0, len(headers) - 1):
-        plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
+        for i in range(0, len(headers) - 1):
+            plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
     
     #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
     plt.legend()
