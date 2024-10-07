@@ -1,4 +1,4 @@
-# You can use this file to plot the loged sensor data
+# You can use this file to plot the logged sensor data
 # Note that you need to modify/adapt it to your own files
 # Feel free to make any modifications/additions here
 
@@ -7,7 +7,7 @@ from utilities import FileReader
 import math
 
 def convertCartesian(values):#function to change to cartesian coordinates
-    #intialization
+    #initialization
     angle = 0.0
     lines = 0
     polar = 0.0
@@ -22,7 +22,7 @@ def convertCartesian(values):#function to change to cartesian coordinates
         polar = values[i][0]
         #gets rid of inf
         if polar == 'inf':
-            polar = 0
+            continue
         #converts to cartesian coordinates that increment with the for loop
         xPos = polar*math.cos(angle*i)
         yPos = polar*math.sin(angle*i)
@@ -51,13 +51,33 @@ def plot_errors(filename):
     #if it is not a lidar scan
     else:
         for val in values:
-            time_list.append(val[-1] - first_stamp)
+            time_list.append((val[-1] - first_stamp)/1e9)
 
         for i in range(0, len(headers) - 1):
-            plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
+            plt.plot(time_list, [lin[i] for lin in values])
     
     #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
-    plt.legend()
+
+    #Plotting for IMU
+    plt.title("IMU Data for a Linear Path")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Measurement Value")
+    plt.legend(["X Acceleration [m/s^2]", "Y Acceleration [m/s^2]", "Angular Velocity [rad/s] "])
+    
+    #Plotting for Odom 
+    # plt.title("Odometry Data for a Spiral Path")
+    # plt.xlabel("Time (s)")
+    # plt.ylabel("Measurement Value")
+    # plt.legend(["X Position [m]", "Y Position [m]", "Angular Position [rad] "])
+    
+    #Plotting for LiDAR 
+    # plt.title("Single Laser Scan for a Linear Path")
+    # plt.xlabel("X Position [m]")
+    # plt.ylabel("Y Position [m]")
+    # plt.legend(["Detected Points"])
+    
+
+    
     plt.grid()
     plt.show()
     
