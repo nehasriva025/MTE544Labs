@@ -50,28 +50,38 @@ def plot_errors(filename):
         plt.scatter(xPos, yPos, label="x vs y", color='green', marker='o')
     #if it is not a lidar scan
     else:
-        for val in values:
-            time_list.append((val[-1] - first_stamp)/1e9)
+        # for val in values:
+        #     time_list.append((val[-1] - first_stamp)/1e9)
 
-        for i in range(0, len(headers) - 1):
-            plt.plot(time_list, [lin[i] for lin in values])
+        # for i in range(0, len(headers) - 1):
+        #     plt.plot(time_list, [lin[i] for lin in values])
     
-    #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
+        plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
 
     #Plotting for IMU
-    plt.title("IMU Data for a Linear Path")
-    plt.xlabel("Time (s)")
-    plt.ylabel("Measurement Value")
-    plt.legend(["X Acceleration [m/s^2]", "Y Acceleration [m/s^2]", "Angular Velocity [rad/s] "])
+    # plt.title("IMU Data for a Linear Path")
+    # plt.xlabel("Time (s)")
+    # plt.ylabel("Measurement Value")
+    # plt.legend(["X Acceleration [m/s^2]", "Y Acceleration [m/s^2]", "Angular Velocity [rad/s] "])
     
     #Plotting for Odom 
-    # plt.title("Odometry Data for a Spiral Path")
+    # plt.title("Odometry Data for a Linear Path")
     # plt.xlabel("Time (s)")
     # plt.ylabel("Measurement Value")
     # plt.legend(["X Position [m]", "Y Position [m]", "Angular Position [rad] "])
+
+
+    plt.title("Robot's Trajectory for a Linear Path")
+    plt.xlabel("X Direction [m]")
+    plt.ylabel("Y Direction [m]")
+    plt.axis('equal')
+    plt.legend(["Trajectory "])
+
+
+
     
     #Plotting for LiDAR 
-    # plt.title("Single Laser Scan for a Linear Path")
+    # plt.title("Single Laser Scan for a Circular Path")
     # plt.xlabel("X Position [m]")
     # plt.ylabel("Y Position [m]")
     # plt.legend(["Detected Points"])
