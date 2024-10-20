@@ -29,9 +29,10 @@ class controller:
         angular_vel=self.PID_angular.update([e_ang, pose[3]], status)
         
         # TODO Part 4: Add saturation limits for the robot linear and angular velocity
-
-        linear_vel = ... if linear_vel > 1.0 else linear_vel
-        angular_vel= ... if angular_vel > 1.0 else angular_vel
+        #change to 0.31 for the real robot
+        linear_vel = 0.22 if linear_vel > 1.0 else linear_vel
+        #change to 1.90  for the real robot
+        angular_vel= 2.84 if angular_vel > 1.0 else angular_vel
         
         return linear_vel, angular_vel
     
