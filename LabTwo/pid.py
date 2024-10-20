@@ -1,6 +1,7 @@
 from rclpy.time import Time
 from utilities import Logger
-
+# from utilities import calculate_linear_error
+# from utilities import calculate_angular_error
 # Controller type
 P=0 # poportional
 PD=1 # proportional and derivative
@@ -9,7 +10,7 @@ PID=3 # proportional, integral, derivative
 
 class PID_ctrl:
     
-    def __init__(self, type_, kp=1.2,kv=0.8,ki=0.2, history_length=3, filename_="errors.csv"):
+    def __init__(self, type_, kp=0.5,kv=0.8,ki=0.2, history_length=3, filename_="errors.csv"):
         
         # Data for the controller
         self.history_length=history_length
@@ -81,11 +82,12 @@ class PID_ctrl:
         error_int=sum_*dt_avg
         
         # TODO Part 4: Log your errors
-        self.logger.log_values( ... )
+        errors = [latest_error,error_dot,error_int,stamp]
+        self.logger.log_values(errors)
         
         # TODO Part 4: Implement the control law of P-controller
         if self.type == P:
-            return ... # complete
+            return self.kp*latest_error
         
         # TODO Part 5: Implement the control law corresponding to each type of controller
         elif self.type == PD:
