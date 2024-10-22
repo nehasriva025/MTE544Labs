@@ -18,7 +18,6 @@ from localization import localization, rawSensor
 from planner import TRAJECTORY_PLANNER, POINT_PLANNER, planner
 from controller import controller, trajectoryController
 
-import math
 # You may add any other imports you may need/want to use below
 # import ...
 
@@ -40,18 +39,18 @@ class decision_maker(Node):
         # TODO Part 5: Tune your parameters here
     
         if motion_type == POINT_PLANNER:
-            self.controller=controller(klp=0.2, kap=0.8, controller=P)
-            # self.controller=controller(klp=0.2, klv=0.5, kap=0.8, kav=0.6, controller=PD)
-            # self.controller=controller(klp=0.2, kli=0.2, kap=0.8, kai=0.6, controller=PI)            
-            # self.controller=controller(klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2, controller=PID)
+            # self.controller=controller(klp=0.4, kap=0.9, controller=P)
+            # self.controller=controller(klp=0.4, klv=0.9, kap=0.9, kav=0.9, controller=PD)
+            # self.controller=controller(klp=0.4, kli=2.2, kap=0.9, kai=0.9, controller=PI)
+            self.controller=controller(klp=0.4, klv=0.9, kli=2.2, kap=0.9, kav=0.9, kai=0.9, controller=PID)
             self.planner=planner(POINT_PLANNER)    
     
     
         elif motion_type==TRAJECTORY_PLANNER:
-            self.controller=trajectoryController(klp=0.2, kap=0.8, controller=P)
-            # self.controller=trajectoryController(klp=0.2, klv=0.5, kap=0.8, kav=0.6, controller=PD)            
-            # self.controller=trajectoryController(klp=0.2, kli=0.2, kap=0.8, kai=0.6, controller=PI)            
-            # self.controller=trajectoryController(klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2, controller=PID)           
+            # self.controller=trajectoryController(klp=0.4, kap=0.9, controller=P)
+            # self.controller=trajectoryController(klp=0.4, klv=0.9, kap=0.9, kav=0.9, controller=PD)
+            # self.controller=trajectoryController(klp=0.4, kli=2.2, kap=0.9, kai=0.9, controller=PI)
+            self.controller = trajectoryController(klp=0.4, klv=0.9, kli=6.2, kap=0.9, kav=0.9, kai=0.9, controller=PID)
             self.planner=planner(TRAJECTORY_PLANNER)
 
         else:
@@ -71,7 +70,7 @@ class decision_maker(Node):
         
         # TODO Part 3: Run the localization node
         spin_once(self.localizer)
-        currPos = self.localizer.getPose
+        currPos = self.localizer.getPose()
 
         if self.localizer.getPose is None:
             print("waiting for odom msgs ....")
@@ -81,13 +80,13 @@ class decision_maker(Node):
         
         # TODO Part 3: Check if you reached the goal
         if type(self.goal) == list: # If its a trajectory 
-            currLinErr = math.abs(calculate_linear_error(currPos,self.goal[-1])) 
-            currAngErr = math.abs(calculate_angular_error(currPos,self.goal[-1]))
+            currLinErr = abs(calculate_linear_error(currPos,self.goal[-1]))
+            currAngErr = abs(calculate_angular_error(currPos,self.goal[-1]))
             #Checking if the magnitude of the error is less than a certain threshold 
             reached_goal = currAngErr < 0.4 and currLinErr < 0.1
         else: #Else its point planner 
-            currLinErr = math.abs(calculate_linear_error(currPos,self.goal)) 
-            currAngErr = math.abs(calculate_angular_error(currPos,self.goal))
+            currLinErr = abs(calculate_linear_error(currPos,self.goal))
+            currAngErr = abs(calculate_angular_error(currPos,self.goal))
             #Checking if the magnitude of the error is less than a certain threshold 
             reached_goal = currAngErr < 0.4 and currLinErr < 0.1
     
@@ -123,7 +122,7 @@ def main(args=None):
 
     # TODO Part 4: instantiate the decision_maker with the proper parameters for moving the robot
     if args.motion.lower() == "point":
-        DM=decision_maker(Twist,'/cmd_vel',odom_qos,[1,1],10,POINT_PLANNER)
+        DM=decision_maker(Twist,'/cmd_vel',odom_qos,[-1,-1],10,POINT_PLANNER)
     elif args.motion.lower() == "trajectory":
         DM=decision_maker(Twist,'/cmd_vel',odom_qos,[1,1],10,TRAJECTORY_PLANNER)
     else:

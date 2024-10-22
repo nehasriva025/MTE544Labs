@@ -77,7 +77,7 @@ class PID_ctrl:
         sum_=0
         for hist in self.history:
             # TODO Part 5: Gather the integration
-            sum += hist[0]
+            sum_ += hist[0]
             pass
         
         error_int=sum_*dt_avg
