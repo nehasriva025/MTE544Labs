@@ -95,7 +95,7 @@ class PID_ctrl:
             return self.kp * latest_error + self.kv * error_dot
         
         elif self.type == PI:
-            return self.kp * latest_error + self.kI * error_int
+            return self.kp * latest_error + self.ki * error_int
         
         elif self.type == PID:
             return self.kp * latest_error + self.kv * error_dot + self.ki * error_int

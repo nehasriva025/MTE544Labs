@@ -69,12 +69,12 @@ class trajectoryController(controller):
         # TODO Part 5: Add saturation limits for the robot linear and angular velocity
 
         #Max for robot (in lab)
-        # linear_max = 0.31 
-        # angular_max = 1.90 
+        linear_max = 0.31 
+        angular_max = 1.90 
 
         #Max for simulation 
-        linear_max = 0.22 
-        angular_max = 2.84 
+        # linear_max = 0.22 
+        # angular_max = 2.84 
 
         linear_vel = linear_max if linear_vel > linear_max else linear_vel
         angular_vel= angular_max if angular_vel > angular_max else angular_vel

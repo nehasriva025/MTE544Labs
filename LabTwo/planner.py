@@ -14,7 +14,7 @@ class planner:
         self.type=type_
 
         #Set trajectory here 
-        self.trajectory_type = SIGMOID_TRAJECTORY
+        self.trajectory_type = PARABOLA_TRAJECTORY
 
     
     def plan(self, goalPoint=[-1.0, -1.0]):
@@ -36,11 +36,11 @@ class planner:
         points_list = []
 
         #Use in lab
-        # start_x = 0
-        # start_y = 0
+        start_x = 0
+        start_y = 0
 
-        start_x = -2
-        start_y = -0.5
+        # start_x = -2
+        # start_y = -0.5
 
         if self.trajectory_type == PARABOLA_TRAJECTORY: 
             range = np.linspace(0 + start_x, 1.5 + start_x, 10)

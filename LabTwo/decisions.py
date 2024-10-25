@@ -40,9 +40,9 @@ class decision_maker(Node):
     
         if motion_type == POINT_PLANNER:
             # self.controller=controller(klp=0.4, kap=0.9, controller=P)
-            # self.controller=controller(klp=0.4, klv=0.9, kap=0.9, kav=0.9, controller=PD)
-            # self.controller=controller(klp=0.4, kli=2.2, kap=0.9, kai=0.9, controller=PI)
-            self.controller=controller(klp=0.4, klv=0.9, kli=2.2, kap=0.9, kav=0.9, kai=0.9, controller=PID)
+            # self.controller=controller(klp=0.4, klv=0.3, kap=0.9, kav=0.2, controller=PD)
+            # self.controller=controller(klp=0.4, kli=0.6, kap=0.9, kai=0.6, controller=PI)
+            # self.controller=controller(klp=0.4, klv=0.3, kli=0.6, kap=0.9, kav=0.2, kai=0.6, controller=PID)
             self.planner=planner(POINT_PLANNER)    
     
     
@@ -50,7 +50,7 @@ class decision_maker(Node):
             # self.controller=trajectoryController(klp=0.4, kap=0.9, controller=P)
             # self.controller=trajectoryController(klp=0.4, klv=0.9, kap=0.9, kav=0.9, controller=PD)
             # self.controller=trajectoryController(klp=0.4, kli=2.2, kap=0.9, kai=0.9, controller=PI)
-            self.controller = trajectoryController(klp=0.4, klv=0.9, kli=6.2, kap=0.9, kav=0.9, kai=0.9, controller=PID)
+            self.controller = trajectoryController(klp=0.5, klv=1.0, kli=0.1, kap=0.9, kav=0.9, kai=0.1, controller=PID)
             self.planner=planner(TRAJECTORY_PLANNER)
 
         else:
@@ -83,12 +83,12 @@ class decision_maker(Node):
             currLinErr = abs(calculate_linear_error(currPos,self.goal[-1]))
             currAngErr = abs(calculate_angular_error(currPos,self.goal[-1]))
             #Checking if the magnitude of the error is less than a certain threshold 
-            reached_goal = currAngErr < 0.4 and currLinErr < 0.1
+            reached_goal = currAngErr < 0.1 and currLinErr < 0.1
         else: #Else its point planner 
             currLinErr = abs(calculate_linear_error(currPos,self.goal))
             currAngErr = abs(calculate_angular_error(currPos,self.goal))
             #Checking if the magnitude of the error is less than a certain threshold 
-            reached_goal = currAngErr < 0.4 and currLinErr < 0.1
+            reached_goal = currAngErr < 0.1 and currLinErr < 0.01
     
 
         if reached_goal:
@@ -117,7 +117,7 @@ def main(args=None):
     # TODO Part 3: You migh need to change the QoS profile based on whether you're using the real robot or in simulation.
     # Remember to define your QoS profile based on the information available in "ros2 topic info /odom --verbose" as explained in Tutorial 3
     
-    odom_qos=QoSProfile(reliability=1, durability=2, history=1, depth=10)
+    odom_qos=QoSProfile(reliability=2, durability=2, history=1, depth=10)
     
 
     # TODO Part 4: instantiate the decision_maker with the proper parameters for moving the robot
