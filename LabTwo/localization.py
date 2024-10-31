@@ -16,8 +16,8 @@ class localization(Node):
 
         super().__init__("localizer")
         
-        # TODO Part 3: Define the QoS profile variable based on whether you are using the simulation (Turtlebot 3 Burger) or the real robot (Turtlebot 4)
-        # Remember to define your QoS profile based on the information available in "ros2 topic info /odom --verbose" as explained in Tutorial 3
+        #Define the QoS profile variable based on whether you are using the simulation (Turtlebot 3 Burger) or the real robot (Turtlebot 4)
+        #Defining QoS profile based on the information available in "ros2 topic info /odom --verbose" as explained in Tutorial 3
 
         odom_qos=QoSProfile(reliability=2, durability=2, history=1, depth=10)
         
@@ -33,7 +33,7 @@ class localization(Node):
     
     def odom_callback(self, pose_msg: odom):
         
-        # TODO Part 3: Read x,y, theta, and record the stamp
+        #Read x,y, theta, and record the stamp
         odom_timestamp = pose_msg.header.stamp # gets timestamp
         odom_quat = pose_msg.pose.pose.orientation # sets quat as orientation
         odom_th = euler_from_quaternion(odom_quat) # gets theta position
@@ -46,7 +46,7 @@ class localization(Node):
     def getPose(self):
         return self.pose
 
-# TODO Part 3
+
 # Here put a guard that makes the node run, ONLY when run as a main thread!
 # This is to make sure this node functions right before using it in decision.py
     

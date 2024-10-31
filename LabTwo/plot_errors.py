@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from utilities import FileReader
 import numpy as np
 
-
+#Functions to plot the reference trajectory if applicable
 def parabola_motion(start_x, start_y):
     xs = np.linspace(0 + start_x, 1.5 + start_x, 10)
     ys = [(x - start_x) ** 2 + start_y for x in xs]
@@ -23,10 +23,12 @@ motion_types = {
     'Sigmoid': sigmoid_motion
 }
 
+#Plotting for trajectories 
 def plot_trajectory(filename, motion_type, headers, values, time_list, axes):
     start_x = 0
     start_y = 0
     xs, ys = motion_types[motion_type](start_x, start_y)
+    #Plotting to different subplots depending on the filename
     if "robot_pose.csv" in filename:
 
         axes[0].plot([lin[0] for lin in values], [lin[1] for lin in values])
@@ -35,8 +37,9 @@ def plot_trajectory(filename, motion_type, headers, values, time_list, axes):
         axes[0].set_xlabel("X Position")
         axes[0].set_ylabel("Y Position")
         axes[0].legend(["Robot Trajectory", "Desired Trajectory"])
-        axes[0].grid()
         axes[0].axis('equal')
+        axes[0].grid()
+        
 
     elif "linear" in filename: 
         axes[1].plot(time_list, [lin[0] for lin in values])
@@ -51,11 +54,12 @@ def plot_trajectory(filename, motion_type, headers, values, time_list, axes):
 
     
 
-
+#Plotting for point motion 
 def plot_point(filename, motion_type, headers, values, time_list, axes): 
     start_x = 0
     start_y = 0
     xs, ys = motion_types[motion_type](start_x, start_y)
+    #Plotting to different subplots depending on the filename 
     if "robot_pose.csv" in filename:
 
         axes[0,0].plot([lin[0] for lin in values], [lin[1] for lin in values])
@@ -126,7 +130,8 @@ def plot_errors(filename, motion_type, axes):
     #Change for sim
     # start_x = -2
     # start_y = -0.5
-
+    
+    #Calling the plotting function depending on the motion type
     if motion_type == "Point":
         plot_point(filename, motion_type, headers, values, time_list, axes)
     else: 
@@ -141,6 +146,7 @@ if __name__=="__main__":
 
     parser = argparse.ArgumentParser(description='Process some files.')
     parser.add_argument('--files', nargs='+', required=True, help='List of files to process')
+    #Added a motion argument to help with plotting depending on the type of motion 
     parser.add_argument('--motion', required=True, help='Motion type')
 
     args = parser.parse_args()
@@ -154,9 +160,9 @@ if __name__=="__main__":
 
 
     if motion_type == "Point":
-        fig, axes = plt.subplots(2,2, figsize=(7,7))
+        fig, axes = plt.subplots(2,2, figsize=(8,8))
     else: 
-        fig, axes = plt.subplots(1,2, figsize=(14,6))
+        fig, axes = plt.subplots(1,2, figsize=(12,6))
 
 
     for filename in filenames:

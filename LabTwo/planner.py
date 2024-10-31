@@ -31,7 +31,7 @@ class planner:
         y = goalPoint[1]
         return x, y
 
-    # TODO Part 6: Implement the trajectories here
+    #Implement the trajectories 
     def trajectory_planner(self):
         points_list = []
 
@@ -39,6 +39,7 @@ class planner:
         start_x = 0
         start_y = 0
 
+        #Use in Sim 
         # start_x = -2
         # start_y = -0.5
 
