@@ -91,6 +91,7 @@ class localization(Node):
         odom_vely = odom_msg.twist.twist.linear.y
         odom_omega = odom_msg.twist.twist.angular.z
         odom_v = np.sqrt(odom_velx**2 + odom_vely**2)
+        odom_timestamp = Time.from_msg(odom_msg.header.stamp).nanoseconds
 
         imu_ax = imu_msg.linear_acceleration.x
         imu_ay = imu_msg.linear_acceleration.y
@@ -113,7 +114,7 @@ class localization(Node):
         #therefore, naming vdot -> ax
         kf_x, kf_y, kf_th, kf_w, kf_v, kf_ax = xhat
 
-        self.pose=np.array(kf_x, kf_y, kf_th, odom_msg.header.stamp)
+        self.pose=np.array(kf_x, kf_y, kf_th, odom_timestamp)
 
         # TODO Part 4: log your data
         #From tutorial: 
@@ -121,7 +122,7 @@ class localization(Node):
         kf_vx = kf_v * np.cos(kf_th) #Getting x component of velocity 
 
         #Log the values stated from the tutorial 
-        self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, odom_msg.header.stamp])
+        self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, odom_timestamp])
       
     def odom_callback(self, pose_msg):
         

@@ -21,7 +21,7 @@ class kalman_filter:
 
         #Updating the state transition matrix and measurement matrix with their respective jacobians 
         #A should be G but we are using A to be consistent with the template 
-        self.A = self.jacobian_A()
+        self.A = self.jacobian_A() #State transition matrix
 
         self.C = self.jacobian_H() #Where H is the measurement matrix
         
