@@ -110,16 +110,15 @@ class localization(Node):
         xhat=self.kf.get_states()
 
         # Update the pose estimate to be returned by getPose
-        #From tutorial: vdot = kf_vdot = kf_ax
-        #therefore, naming vdot -> ax
-        kf_x, kf_y, kf_th, kf_w, kf_v, kf_ax = xhat
+        #From tutorial: vdot = kf_vdot = kf_ax, v = vx
+        #therefore, naming vdot -> ax and v -> vx
+        kf_x, kf_y, kf_th, kf_w, kf_vx, kf_ax = xhat
 
         self.pose=np.array(kf_x, kf_y, kf_th, odom_timestamp)
 
         # TODO Part 4: log your data
         #From tutorial: 
-        kf_ay = kf_v * kf_w #Getting y component of accel 
-        kf_vx = kf_v * np.cos(kf_th) #Getting x component of velocity 
+        kf_ay = kf_vx * kf_w #Getting y component of accel 
 
         #Log the values stated from the tutorial 
         self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, odom_timestamp])
