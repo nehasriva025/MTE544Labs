@@ -114,7 +114,7 @@ class localization(Node):
         #therefore, naming vdot -> ax and v -> vx
         kf_x, kf_y, kf_th, kf_w, kf_vx, kf_ax = xhat
 
-        self.pose=np.array(kf_x, kf_y, kf_th, odom_timestamp)
+        self.pose=np.array([kf_x, kf_y, kf_th, odom_timestamp])
 
         # TODO Part 4: log your data
         #From tutorial: 
