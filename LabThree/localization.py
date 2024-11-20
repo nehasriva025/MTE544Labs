@@ -59,6 +59,42 @@ class localization(Node):
         Q_value = 0.5
         R_value = 0.5
 
+        #Test 1 
+        # Q_value = 0.25
+        # R_value = 0.5
+
+        # #Test 2 
+        # Q_value = 2.5
+        # R_value = 0.5
+
+        # #Test 3 
+        # Q_value = 0.5
+        # R_value = 0.25
+
+        # #Test 4 
+        # Q_value = 0.5
+        # R_value = 2.5
+
+        # #Test 5
+        # Q_value = 1.0
+        # R_value = 0.1
+
+        #Test 6 
+        # Q_value = 14.0
+        # R_value = 25.0
+
+        #Test 7
+        # Q_value = 0.05
+        # R_value = 0.01
+
+        #Test 8
+        # Q_value = 0.05
+        # R_value = 3.0
+
+        #Test 9
+        # Q_value = 0.05
+        # R_value = 10.0
+
         #Given inital value * Identity matrix = diagonal matrix of given value
         # Q is nxn where n = 6 
         Q = Q_value*np.eye(6)
@@ -91,7 +127,7 @@ class localization(Node):
         odom_vely = odom_msg.twist.twist.linear.y
         odom_omega = odom_msg.twist.twist.angular.z
         odom_v = np.sqrt(odom_velx**2 + odom_vely**2)
-        odom_timestamp = Time.from_msg(odom_msg.header.stamp).nanoseconds
+        odom_timestamp = odom_msg.header.stamp
 
         imu_ax = imu_msg.linear_acceleration.x
         imu_ay = imu_msg.linear_acceleration.y
@@ -121,7 +157,7 @@ class localization(Node):
         kf_ay = kf_vx * kf_w #Getting y component of accel 
 
         #Log the values stated from the tutorial 
-        self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, odom_timestamp])
+        self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, Time.from_msg(odom_timestamp).nanoseconds])
       
     def odom_callback(self, pose_msg):
         
