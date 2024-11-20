@@ -1,7 +1,12 @@
 import matplotlib.pyplot as plt
 from utilities import FileReader
 
+plot_two_headers = [
+    "imu_ax [m/s^2]", "imu_ay [m/s^2]", "kf_ax [m/s^2]", "kf_ay [m/s^2]", 
+    "kf_vx [m/s]", "kf_w [rad/s]", "kf_x [m]", "kf_y [m]" 
 
+
+]
 
 
 def plot_errors(filename):
@@ -13,7 +18,7 @@ def plot_errors(filename):
     first_stamp=values[0][-1]
     
     for val in values:
-        time_list.append(val[-1] - first_stamp)
+        time_list.append((val[-1] - first_stamp)/1e9)
 
     
     
@@ -21,16 +26,26 @@ def plot_errors(filename):
 
 
     axes[0].plot([lin[len(headers) - 3] for lin in values], [lin[len(headers) - 2] for lin in values])
-    axes[0].set_title("state space")
+    axes[0].set_title("Robot Trajectory")
+    axes[0].set_xlabel("X")
+    axes[0].set_ylabel("Y")
     axes[0].grid()
 
     
-    axes[1].set_title("each individual state")
+    axes[1].set_title("Measured vs. Estimated Values")
     for i in range(0, len(headers) - 1):
-        axes[1].plot(time_list, [lin[i] for lin in values], label= headers[i])
+        axes[1].plot(time_list, [lin[i] for lin in values], label= plot_two_headers[i])
 
     axes[1].legend()
     axes[1].grid()
+    axes[0].set_aspect('equal', adjustable='box')
+    axes[0].relim()
+    axes[1].set_xlabel("Time (s)")
+    axes[1].set_ylabel("Values")
+
+    fig.suptitle("Plots For Spiral Motion, Q = 0.05, R = 10.0")
+
+    fig.subplots_adjust(hspace=0.5) 
 
     plt.show()
     
