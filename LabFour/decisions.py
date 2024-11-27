@@ -60,6 +60,7 @@ class decision_maker(Node):
         elif motion_type==TRAJECTORY_PLANNER:
             # TODO PART 5 Bonus Put the gains that you conclude from lab 2
             # Using PID gains tuned from lab 2
+            #IN LAB: PID vals might be bad 
             self.controller=trajectoryController(klp=0.5, klv=1.0, kli=0.1, kap=0.9, kav=0.9, kai=0.1)      
             self.planner=planner(TRAJECTORY_PLANNER)
         

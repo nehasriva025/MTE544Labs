@@ -34,7 +34,7 @@ class planner:
         #How far away we want the obstacles to be
 
         #IN LAB: tune this val? 
-        self.m_utilites=mapManipulator(laser_sig=0.25)
+        self.m_utilites=mapManipulator(laser_sig=0.5)
             
         self.costMap=self.m_utilites.make_likelihood_field()
         
