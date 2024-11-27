@@ -44,6 +44,7 @@ class decision_maker(Node):
 
         # TODO PART 5 choose your threshold
         # Threshold used from previous labs to check if the robot reached the goal
+        #IN LAB: May need to tune this value, however it worked well in the previous labs
         self.reachThreshold=0.01
 
         # TODO PART 5 your localization type
