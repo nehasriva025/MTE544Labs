@@ -73,9 +73,9 @@ class localization(Node):
             
             # TODO PART 5 Bonus put the Q and R matrices
             # that you conclude from lab Three
-            Q=...
-            R=...
-            P=...
+            Q= 0.5 * np.eye(6)
+            R= 0.25 * np.eye(4)
+            P= 0.5 * np.eye(6)
                         
             self.kf=kalman_filter(P,Q,R, x)
             
@@ -86,21 +86,35 @@ class localization(Node):
 
         self.timelast=time.time()
 
+        odom_velx = odom_msg.twist.twist.linear.x
+        odom_vely = odom_msg.twist.twist.linear.y
+        odom_omega = odom_msg.twist.twist.angular.z
+        odom_timestamp = odom_msg.header.stamp
 
-        z=np.array([odom_msg.twist.twist.linear.x,
-                    odom_msg.twist.twist.angular.z,
-                    imu_msg.linear_acceleration.x,
-                    imu_msg.linear_acceleration.y])
+        imu_ax = imu_msg.linear_acceleration.x
+        imu_ay = imu_msg.linear_acceleration.y
+
+
+        z=np.array([odom_velx,
+                    odom_omega,
+                    imu_ax,
+                    imu_ay])
         
         self.kf.predict(dt)
         self.kf.update(z)
         
         xhat=self.kf.get_states()
+        kf_x, kf_y, kf_th, kf_w, kf_vx, kf_ax = xhat
+        kf_ay = kf_vx * kf_w #Getting y component of accel 
+
         
-        self.pose=np.array([xhat[0],
-                            xhat[1],
-                            normalize_angle(xhat[2]),
-                            odom_msg.header.stamp])
+        self.pose=np.array([kf_x,
+                            kf_y,
+                            normalize_angle(kf_th),
+                            odom_timestamp])
+        
+        self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, Time.from_msg(odom_timestamp).nanoseconds])
+
         
     def odom_callback(self, pose_msg):
         

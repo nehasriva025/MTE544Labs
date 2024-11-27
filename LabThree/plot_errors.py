@@ -30,6 +30,8 @@ def plot_errors(filename):
     axes[0].set_xlabel("X")
     axes[0].set_ylabel("Y")
     axes[0].grid()
+    axes[0].set_aspect('equal', adjustable='box')
+    axes[0].relim()
 
     
     axes[1].set_title("Measured vs. Estimated Values")
@@ -38,12 +40,10 @@ def plot_errors(filename):
 
     axes[1].legend()
     axes[1].grid()
-    axes[0].set_aspect('equal', adjustable='box')
-    axes[0].relim()
     axes[1].set_xlabel("Time (s)")
     axes[1].set_ylabel("Values")
 
-    fig.suptitle("Plots For Spiral Motion, Q = 0.05, R = 10.0")
+    fig.suptitle("Plots For Spiral Motion, Q = 0.25, R = 0.5")
 
     fig.subplots_adjust(hspace=0.5) 
 
