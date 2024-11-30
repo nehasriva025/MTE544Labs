@@ -2,7 +2,7 @@
 
 
 from math import atan2, asin, sqrt
-from sensor_msgs.msg import LaserScan
+# from sensor_msgs.msg import LaserScan
 
 
 import numpy as np
@@ -143,20 +143,20 @@ def calculate_angular_error(current_pose, goal_pose):
 
 
 
-def convertScanToCartesian(laserScan: LaserScan):
+# def convertScanToCartesian(laserScan: LaserScan):
 
-    angle_min = laserScan.angle_min
-    angle_increment = laserScan.angle_increment
-    range_min = laserScan.range_min
-    range_max = laserScan.range_max
-    ranges = np.array(laserScan.ranges)
+#     angle_min = laserScan.angle_min
+#     angle_increment = laserScan.angle_increment
+#     range_min = laserScan.range_min
+#     range_max = laserScan.range_max
+#     ranges = np.array(laserScan.ranges)
 
-    valid_indices = np.where((ranges != 0) & (ranges <= range_max) & (ranges >= range_min)) 
-    valid_ranges = ranges[valid_indices]
+#     valid_indices = np.where((ranges != 0) & (ranges <= range_max) & (ranges >= range_min)) 
+#     valid_ranges = ranges[valid_indices]
 
-    angles = angle_min + valid_indices[0] * angle_increment
+#     angles = angle_min + valid_indices[0] * angle_increment
 
-    cartesian_points = np.column_stack((valid_ranges * np.cos(angles), valid_ranges * np.sin(angles)))
-    cartesian_points_homo = np.column_stack((cartesian_points, np.ones(cartesian_points.shape[0])))
+#     cartesian_points = np.column_stack((valid_ranges * np.cos(angles), valid_ranges * np.sin(angles)))
+#     cartesian_points_homo = np.column_stack((cartesian_points, np.ones(cartesian_points.shape[0])))
 
-    return cartesian_points, cartesian_points_homo
+#     return cartesian_points, cartesian_points_homo

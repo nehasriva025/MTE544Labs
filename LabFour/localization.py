@@ -85,6 +85,9 @@ class localization(Node):
         dt = time.time() - self.timelast
 
         self.timelast=time.time()
+        odom_x = odom_msg.pose.pose.position.x
+        odom_y = odom_msg.pose.pose.position.y
+        odom_th = euler_from_quaternion(odom_msg.pose.pose.orientation)
 
         odom_velx = odom_msg.twist.twist.linear.x
         odom_vely = odom_msg.twist.twist.linear.y
@@ -113,7 +116,7 @@ class localization(Node):
                             normalize_angle(kf_th),
                             odom_timestamp])
         
-        self.loc_logger.log_values([imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, Time.from_msg(odom_timestamp).nanoseconds])
+        self.loc_logger.log_values([odom_x, odom_y, odom_th, imu_ax, imu_ay, kf_ax, kf_ay, kf_vx, kf_w, kf_x, kf_y, Time.from_msg(odom_timestamp).nanoseconds])
 
         
     def odom_callback(self, pose_msg):
