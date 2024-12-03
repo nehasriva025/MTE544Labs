@@ -27,3 +27,5 @@ def plot_errors():
 
 if __name__=="__main__":
     plot_errors()
+
+    #Plotting the map with the odom data can be found in plotMap.py
