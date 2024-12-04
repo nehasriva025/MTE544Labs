@@ -28,12 +28,12 @@ class planner:
     def initTrajectoryPlanner(self):
 
 
-        # TODO PART 5 Create the cost-map, the laser_sig is 
+        # PART 5 Create the cost-map, the laser_sig is 
         # the standard deviation for the gausiian for which
         # the mean is located on the occupant grid. 
         #How far away we want the obstacles to be
 
-        #IN LAB: tune this val? 
+        #IN LAB: tune this val
         self.m_utilites=mapManipulator(laser_sig=0.5)
             
         self.costMap=self.m_utilites.make_likelihood_field()
@@ -50,7 +50,7 @@ class planner:
         startPose=self.m_utilites.position_2_cell(startPoseCart)
         endPose=self.m_utilites.position_2_cell(endPoseCart)
         
-        # TODO PART 5 convert the cell pixels into the cartesian coordinates
+        # PART 5 convert the cell pixels into the cartesian coordinates
         
         Path = search(self.costMap, startPose, endPose) 
 
@@ -59,7 +59,7 @@ class planner:
 
 
 
-        # TODO PART 5 return the path as list of [x,y]
+        # PART 5 return the path as list of [x,y]
         return Path
 
 

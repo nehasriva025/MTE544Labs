@@ -42,12 +42,12 @@ class decision_maker(Node):
         
         publishing_period=1/rate
 
-        # TODO PART 5 choose your threshold
+        # PART 5 choose your threshold
         # Threshold used from previous labs to check if the robot reached the goal
         #IN LAB: May need to tune this value, however it worked well in the previous labs
         self.reachThreshold=0.1
 
-        # TODO PART 5 your localization type
+        # PART 5 your localization type
         # Using a kalman filter for localization (will implement Q, R, and P from Lab 3)
         self.localizer=localization(type=kalmanFilter)
 
@@ -59,9 +59,9 @@ class decision_maker(Node):
 
         
         elif motion_type==TRAJECTORY_PLANNER:
-            # TODO PART 5 Bonus Put the gains that you conclude from lab 2
+            # PART 5 Bonus Put the gains that you conclude from lab 2
             # Using PID gains tuned from lab 2
-            #IN LAB: PID vals might be bad 
+            #IN LAB: PID vals might be different due to a different robot, may need to tune 
             # self.controller=trajectoryController(klp=0.3, klv=0.8, kli=0.1, kap=0.3, kav=0.8, kai=0.1) 
             self.controller=trajectoryController(klp=0.5, klv=1.0, kli=5.0, kap=1.0, kav=0.25, kai=1.0)      
             self.planner=planner(TRAJECTORY_PLANNER)

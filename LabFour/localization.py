@@ -71,7 +71,7 @@ class localization(Node):
                         0,
                         0])        
             
-            # TODO PART 5 Bonus put the Q and R matrices
+            # PART 5 Bonus put the Q and R matrices
             # that you conclude from lab Three
             Q= 0.5 * np.eye(6)
             R= 0.25 * np.eye(4)
